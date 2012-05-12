@@ -1,0 +1,6 @@
+
+Do 
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+
+to be able to run the program without installing the library.

@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libcanopen
+Description: Open source CANopen library for Linux SocketCAN.
+Requires: 
+Version: @PACKAGE_VERSION@
+URL: http://www.rscada.se/libcanopen/
+Libs: -L${libdir} -lcanopen
+Cflags: -I${includedir}
