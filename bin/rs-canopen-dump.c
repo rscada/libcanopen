@@ -36,8 +36,6 @@
 int
 main(int argc, char **argv)
 {
-    struct sockaddr_can addr;
-    struct ifreq ifr;
     struct can_frame can_frame;
     canopen_frame_t canopen_frame;
     int sock, bytes_read;
@@ -49,30 +47,14 @@ main(int argc, char **argv)
     }
 
     /* Create the socket */
-    if ((sock = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0)
+    if ((sock = can_socket_open(argv[1])) < 0)
     {
         fprintf(stderr, "Error: Failed to create socket.\n");
         return -1;
     }
  
-    /* Locate the interface you wish to use */
-    strcpy(ifr.ifr_name, argv[1]);
-    ioctl(sock, SIOCGIFINDEX, &ifr); /* ifr.ifr_ifindex gets filled 
-                                      * with that device's index */
-                                     // XXX add check
+    printf("sizeof can_frame = %d\n", sizeof(struct can_frame));
  
-    /* Select that CAN interface, and bind the socket to it. */
-    addr.can_family = AF_CAN;
-    addr.can_ifindex = ifr.ifr_ifindex;
-    bind(sock, (struct sockaddr*)&addr, sizeof(addr)); // XXX Add check
- 
-    /* Send a message to the CAN bus * /
-    frame.can_id = 0x123;
-    strcpy(frame.data, "foo");
-    frame.can_dlc = strlen(frame.data);
-    int bytes_sent = write(sock, &frame, sizeof(frame));
-    */
-
     while (1)
     {
 

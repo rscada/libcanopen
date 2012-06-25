@@ -1,0 +1,12 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libcanopen
+Description: Open source CANopen library for Linux SocketCAN.
+Requires: 
+Version: 0.1.0
+URL: http://www.rscada.se/libcanopen/
+Libs: -L${libdir} -lcanopen
+Cflags: -I${includedir}
