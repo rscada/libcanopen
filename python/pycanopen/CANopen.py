@@ -117,4 +117,15 @@ class CANopen:
         return res.value
         
         
+    def SDODownloadExp(self, node, index, subindex, data):
+        """
+        Expediated SDO upload
+        """
+        data_len = len(data)
+        # data has to be made into a buffer string
+        libcanopen.canopen_sdo_download_exp(self.sock, c_unit8(node), c_uint16(index), c_uint8(subindex), data, data_len)
+        
+        
+        
+        
         
