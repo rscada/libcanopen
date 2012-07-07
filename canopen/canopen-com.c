@@ -118,7 +118,12 @@ canopen_sdo_upload_exp(int sock, uint8_t node, uint16_t index,
         return 1;
     }
 
-    while (frame_count < 1000)
+    if (can_filter_node_set(sock, node) < 0)
+    {
+        printf("%s: Error, failed to set CAN filters\n", __PRETTY_FUNCTION__);
+    }
+
+    while (frame_count < 10) // still needed?
     {
         if (canopen_frame_recv(sock, &canopen_frame) != 0)
         {
@@ -182,6 +187,11 @@ canopen_sdo_download_exp(int sock, uint8_t node,     uint16_t index,
         return 1;
     }
 
+    if (can_filter_node_set(sock, node) < 0)
+    {
+        printf("%s: Error, failed to set CAN filters\n", __PRETTY_FUNCTION__);
+    }    
+
     while (frame_count < 1000)
     {
         if (canopen_frame_recv(sock, &canopen_frame) != 0)
@@ -227,6 +237,11 @@ canopen_sdo_upload_seg(int sock, uint8_t node,  uint16_t index, uint8_t subindex
     {
         return 1;
     }
+
+    if (can_filter_node_set(sock, node) < 0)
+    {
+        printf("%s: Error, failed to set CAN filters\n", __PRETTY_FUNCTION__);
+    }   
 
     while (frame_count < 1000)
     {
@@ -356,6 +371,11 @@ canopen_sdo_download_seg(int sock, uint8_t node, uint16_t index, uint8_t subinde
         return 1;
     }
 
+    if (can_filter_node_set(sock, node) < 0)
+    {
+        printf("%s: Error, failed to set CAN filters\n", __PRETTY_FUNCTION__);
+    }       
+
     while (frame_count < 1000)
     {
         if (canopen_frame_recv(sock, &canopen_frame) != 0)
@@ -479,6 +499,11 @@ canopen_sdo_download_block(int sock, uint8_t node, uint16_t index, uint8_t subin
     {
         return 1;
     }
+
+    if (can_filter_node_set(sock, node) < 0)
+    {
+        printf("%s: Error, failed to set CAN filters\n", __PRETTY_FUNCTION__);
+    }   
 
     while (frame_count < 1000)
     {

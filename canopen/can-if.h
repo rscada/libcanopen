@@ -32,4 +32,7 @@
 int can_socket_open();
 int can_socket_close(int socket);
 
+int can_filter_node_set(int socket, uint8_t node);
+int can_filter_clear(int socket);
+
 #endif /* _CAN_IF_H */

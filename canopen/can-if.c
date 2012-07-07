@@ -32,6 +32,7 @@ can_socket_open(char *interface)
 {
     struct sockaddr_can addr;
     struct ifreq ifr;
+    struct timeval tv= {1,0};
     int sock, bytes_read;
 
     /* Create the socket */
@@ -41,6 +42,9 @@ can_socket_open(char *interface)
         return -1;
     }
  
+    // set a timeoute for read
+    //setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv));
+
     /* Locate the interface you wish to use */
     strcpy(ifr.ifr_name, interface);
     ioctl(sock, SIOCGIFINDEX, &ifr); /* ifr.ifr_ifindex gets filled 
@@ -67,4 +71,27 @@ int
 can_socket_close(int socket)
 {
     return close(socket);
+}
+
+int
+can_filter_node_set(int sock, uint8_t node)
+{
+    struct can_filter rfilter[1];
+
+    rfilter[0].can_id   = node;
+    rfilter[0].can_mask = 0x00;
+
+    return setsockopt(sock, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
+}
+
+
+int
+can_filter_clear(int sock)
+{
+    struct can_filter rfilter[1];
+
+    rfilter[0].can_id   = 0x00;
+    rfilter[0].can_mask = 0x00; // accept anything
+
+    return setsockopt(sock, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
 }
