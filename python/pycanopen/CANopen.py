@@ -113,17 +113,24 @@ class CANopen:
         Expediated SDO upload
         """
         res = c_uint32()
-        libcanopen.canopen_sdo_upload_exp(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), byref(res))
+        ret = libcanopen.canopen_sdo_upload_exp(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), byref(res))
+
+        if ret != 0:
+            raise "CANopen Expediated SDO upload error"
+
         return res.value
         
         
-    def SDODownloadExp(self, node, index, subindex, data):
+    def SDODownloadExp(self, node, index, subindex, data, size):
         """
-        Expediated SDO upload
+        Expediated SDO download
         """
-        data_len = len(data)
-        # data has to be made into a buffer string
-        libcanopen.canopen_sdo_download_exp(self.sock, c_unit8(node), c_uint16(index), c_uint8(subindex), data, data_len)
+
+        ret = libcanopen.canopen_sdo_download_exp(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), c_uint32(data), c_uint16(size))
+
+        if ret != 0:
+            raise "CANopen Expediated SDO download error"
+
         
         
         
