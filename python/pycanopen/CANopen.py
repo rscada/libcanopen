@@ -108,6 +108,10 @@ class CANopen:
     # SDO related functions
     #
 
+    #
+    # EXPEDIATED
+    #
+
     def SDOUploadExp(self, node, index, subindex):
         """
         Expediated SDO upload
@@ -116,11 +120,12 @@ class CANopen:
         ret = libcanopen.canopen_sdo_upload_exp(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), byref(res))
 
         if ret != 0:
-            raise "CANopen Expediated SDO upload error"
+            raise Exception("CANopen Expediated SDO upload error")
 
         return res.value
         
-        
+
+       
     def SDODownloadExp(self, node, index, subindex, data, size):
         """
         Expediated SDO download
@@ -129,10 +134,67 @@ class CANopen:
         ret = libcanopen.canopen_sdo_download_exp(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), c_uint32(data), c_uint16(size))
 
         if ret != 0:
-            raise "CANopen Expediated SDO download error"
+            raise Exception("CANopen Expediated SDO download error")
 
+    #
+    # SEGMENTED
+    #      
+        
+    def SDOUploadSeg(self, node, index, subindex, size):
+        """
+        Segmented SDO upload
+        """
+        data = create_string_buffer(size)
+        ret = libcanopen.canopen_sdo_upload_seg(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), data, c_uint16(size));
+
+        if ret < 0:
+            raise Exception("CANopen Segmented SDO upload error: ret = %d" % ret)
+
+        hex_str = "".join(["%.2x" % ord(data[i]) for i in range(ret)])
+        #[0:-2]
+
+        return hex_str
+
+       
+    def SDODownloadSeg(self, node, index, subindex, str_data, size):
+        """
+        Segmented SDO download
+        """
+        n = len(str_data)/2
+        data = create_string_buffer(''.join([chr(int(str_data[2*n:2*n+2],16)) for n in range(n)]))
+
+        ret = libcanopen.canopen_sdo_download_seg(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), data, c_uint16(n));
+
+        if ret != 0:
+            raise Exception("CANopen Segmented SDO download error")
+
+    #
+    # BLOCK
+    #
+
+    def SDOUploadBlock(self, node, index, subindex, size):
+        """
+        Block SDO upload: not implemented.
+        """
+        data = create_string_buffer(size)
+        ret = libcanopen.canopen_sdo_upload_block(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), data, c_uint16(size));
+
+        if ret != 0:
+            raise Exception("CANopen Block SDO upload error")
+
+        hex_str = "".join(["%.2x" % ord(d) for d in data])[0:-2]
+
+        return hex_str
         
         
-        
-        
-        
+    def SDODownloadBlock(self, node, index, subindex, str_data, size):
+        """
+        Block SDO download
+        """
+        n = len(str_data)/2
+        data = create_string_buffer(''.join([chr(int(str_data[2*n:2*n+2],16)) for n in range(n)]))
+
+        ret = libcanopen.canopen_sdo_download_block(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), data, c_uint16(n));
+
+        if ret != 0:
+            raise Exception("CANopen Block SDO download error")

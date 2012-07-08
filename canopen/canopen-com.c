@@ -235,7 +235,7 @@ canopen_sdo_upload_seg(int sock, uint8_t node,  uint16_t index, uint8_t subindex
 
     if (canopen_frame_send(sock, &canopen_frame) != 0)
     {
-        return 1;
+        return -1;
     }
 
     if (can_filter_node_set(sock, node) < 0)
@@ -247,7 +247,7 @@ canopen_sdo_upload_seg(int sock, uint8_t node,  uint16_t index, uint8_t subindex
     {
         if (canopen_frame_recv(sock, &canopen_frame) != 0)
         {
-            return 1;
+            return -1;
         }
 
         if (canopen_frame.id == node && canopen_frame.function_code == CANOPEN_FC_SDO_TX)
@@ -289,7 +289,7 @@ canopen_sdo_upload_seg(int sock, uint8_t node,  uint16_t index, uint8_t subindex
 
                         if (canopen_frame_send(sock, &canopen_frame) != 0)
                         {
-                            return 1;
+                            return -1;
                         }
 
 
@@ -318,7 +318,7 @@ canopen_sdo_upload_seg(int sock, uint8_t node,  uint16_t index, uint8_t subindex
 
                         if (canopen_frame_send(sock, &canopen_frame) != 0)
                         {
-                            return 1;
+                            return -1;
                         }
                     }
                     else
@@ -334,7 +334,7 @@ canopen_sdo_upload_seg(int sock, uint8_t node,  uint16_t index, uint8_t subindex
                     fprintf(stderr, "SDO read error: %s [%s]\n",
                                     CANOPEN_SDO_CS_ADT_STR, 
                                     canopen_sdo_abort_code_lookup(&(canopen_frame.payload.sdo)));
-                    return 1;
+                    return -1;
                 }
                 default:
                     if (canopen_com_debug)

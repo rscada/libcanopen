@@ -32,10 +32,10 @@ can_socket_open(char *interface)
 {
     struct sockaddr_can addr;
     struct ifreq ifr;
-    struct timeval tv= {1,0};
+    struct timeval tv= {0,100000};
     int sock, bytes_read;
 
-    /* Create the socket */
+    // create CAN socket
     if ((sock = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0)
     {
         fprintf(stderr, "Error: Failed to create socket.\n");
@@ -43,26 +43,15 @@ can_socket_open(char *interface)
     }
  
     // set a timeoute for read
-    //setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv));
+    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv));
 
-    /* Locate the interface you wish to use */
+    // bind socket to the given interface
     strcpy(ifr.ifr_name, interface);
-    ioctl(sock, SIOCGIFINDEX, &ifr); /* ifr.ifr_ifindex gets filled 
-                                      * with that device's index */
-                                     // XXX add check
- 
-    /* Select that CAN interface, and bind the socket to it. */
+    ioctl(sock, SIOCGIFINDEX, &ifr);// XXX add check
     addr.can_family = AF_CAN;
     addr.can_ifindex = ifr.ifr_ifindex;
     bind(sock, (struct sockaddr*)&addr, sizeof(addr)); // XXX Add check
  
-    /* Send a message to the CAN bus * /
-    frame.can_id = 0x123;
-    strcpy(frame.data, "foo");
-    frame.can_dlc = strlen(frame.data);
-    int bytes_sent = write(sock, &frame, sizeof(frame));
-    */
-    
     return sock;
 }
 
@@ -81,7 +70,10 @@ can_filter_node_set(int sock, uint8_t node)
     rfilter[0].can_id   = node;
     rfilter[0].can_mask = 0x00;
 
-    return setsockopt(sock, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
+    // seems not to work to chance filters after bind
+    setsockopt(sock, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
+
+    return 0;
 }
 
 
