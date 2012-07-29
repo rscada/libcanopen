@@ -174,7 +174,7 @@ class CANopen:
 
     def SDOUploadBlock(self, node, index, subindex, size):
         """
-        Block SDO upload: not implemented.
+        Block SDO upload.
         """
         data = create_string_buffer(size)
         ret = libcanopen.canopen_sdo_upload_block(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), data, c_uint16(size));
@@ -189,7 +189,7 @@ class CANopen:
         
     def SDODownloadBlock(self, node, index, subindex, str_data, size):
         """
-        Block SDO download
+        Block SDO download.
         """
         n = len(str_data)/2
         data = create_string_buffer(''.join([chr(int(str_data[2*n:2*n+2],16)) for n in range(n)]))
@@ -198,3 +198,6 @@ class CANopen:
 
         if ret != 0:
             raise Exception("CANopen Block SDO download error")
+            
+            
+            

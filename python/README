@@ -1,3 +1,5 @@
+Python bindings for libCANopen.
+
 Install:
 
 sudo python setup.py install

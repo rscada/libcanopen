@@ -11,21 +11,16 @@
 # ------------------------------------------------------------------------------
 
 """
-Read node info from a CANopen node
+Read CAN frame, parse into CANopen frame, and dump to STDOUT.
 """
 
 from pyCANopen import *
 
 canopen = CANopen()
 
-node = 5
-
-value = canopen.SDOUploadExp(node, 0x1018, 0x01)
-print("Vendor  ID   = 0x%.8X\n" % value)
-
-value = canopen.SDOUploadExp(node, 0x1018, 0x02)
-print("Product ID   = 0x%.8X\n" % value)
-
-value = canopen.SDOUploadExp(node, 0x1018, 0x03)
-print("Software Ver = 0x%.8X\n" % value)
-
+while True:
+    canopen_frame = canopen.read_frame()
+    if canopen_frame:
+        print canopen_frame
+    else:
+        print("CANopen Frame parse error")

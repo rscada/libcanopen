@@ -24,7 +24,7 @@ setup(
     name = "pyCANopen",
     version = "%d.%d.%d" % (MAJOR, MINOR, MICRO),
     packages = ['pycanopen'],
-    scripts = ['pycanopen/canopen-node-info.py', 'pycanopen/canopen-dump.py'],
+    scripts = ['examples/canopen-node-info.py', 'examples/canopen-dump.py'],
     author = "Robert Johansson",
     author_email = "rob@raditex.nu",
     license = "BSD",
