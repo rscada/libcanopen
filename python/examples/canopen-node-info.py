@@ -15,11 +15,11 @@ Read node info from a CANopen node
 """
 
 import sys
-from pyCANopen import *
+from pycanopen import *
 
 canopen = CANopen()
 
-if len(sys.argv) == 1:
+if len(sys.argv) == 2:
     # get the node address from the first command-line argument
     node = int(sys.argv[1])
 else:

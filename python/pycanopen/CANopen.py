@@ -194,7 +194,7 @@ class CANopen:
         n = len(str_data)/2
         data = create_string_buffer(''.join([chr(int(str_data[2*n:2*n+2],16)) for n in range(n)]))
 
-        ret = libcanopen.canopen_sdo_download_block(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), data, c_uint16(n));
+        ret = libcanopen.canopen_sdo_download_block(self.sock, c_uint8(node), c_uint16(index), c_uint8(subindex), data, c_uint16(n+1));
 
         if ret != 0:
             raise Exception("CANopen Block SDO download error")
