@@ -48,7 +48,7 @@ canopen_frame_send(int sock, canopen_frame_t *canopen_frame)
 
     if (nbytes < 0)
     {
-        perror("write: CAN raw socket write failed");
+        //perror("write: CAN raw socket write failed");
         return 1;
     }
 
@@ -76,7 +76,7 @@ canopen_frame_recv(int sock, canopen_frame_t *canopen_frame)
 
     if (nbytes < 0)
     {
-        perror("read: can raw socket read");
+        //perror("read: can raw socket read");
         return 1;
     }
 
