@@ -123,7 +123,7 @@ canopen_sdo_upload_exp(int sock, uint8_t node, uint16_t index,
         printf("%s: Error, failed to set CAN filters\n", __PRETTY_FUNCTION__);
     }
 
-    while (frame_count < 10) // still needed?
+    while (frame_count < 100) // still needed?
     {
         if (canopen_frame_recv(sock, &canopen_frame) != 0)
         {
@@ -165,7 +165,7 @@ canopen_sdo_upload_exp(int sock, uint8_t node, uint16_t index,
         frame_count++;
     }
 
-    return 0;
+    return 1;
 }
 
 
@@ -210,7 +210,7 @@ canopen_sdo_download_exp(int sock, uint8_t node,     uint16_t index,
         frame_count++;
     }
 
-    return 0;
+    return 1;
 }
 
 
@@ -345,7 +345,7 @@ canopen_sdo_upload_seg(int sock, uint8_t node,  uint16_t index, uint8_t subindex
         frame_count++;
     }
 
-    return 0;
+    return 1;
 }
 
 
@@ -455,7 +455,7 @@ canopen_sdo_download_seg(int sock, uint8_t node, uint16_t index, uint8_t subinde
         frame_count++;
     }
 
-    return 0;
+    return 1;
 }
 
 
@@ -718,6 +718,6 @@ canopen_sdo_download_block(int sock, uint8_t node, uint16_t index, uint8_t subin
     }
 
     printf("%s: Warning: frame count overflow\n", __PRETTY_FUNCTION__);
-    return 0;
+    return 1;
 }
 
