@@ -73,10 +73,10 @@ class CANopen:
         if self.sock:
             can_frame = CANFrame()
             if libc.read(self.sock, byref(can_frame), c_int(16)) != 16:
-                raise "CAN frame read error"
+                raise Exception("CAN frame read error")
             return can_frame
         else:
-            raise "CAN fram read error: socket not connected"
+            raise Exception("CAN fram read error: socket not connected")
             
     def parse_can_frame(self, can_frame):
         """
@@ -86,7 +86,7 @@ class CANopen:
         if libcanopen.canopen_frame_parse(byref(canopen_frame), byref(can_frame)) == 0:
             return canopen_frame
         else:
-            raise "CANopen Frame parse error"
+            raise Exception("CANopen Frame parse error")
                         
     def read_frame(self):
         """
@@ -95,11 +95,11 @@ class CANopen:
         """
         can_frame = self.read_can_frame()
         if not can_frame:
-            raise "CAN Frame read error"
+            raise Exception("CAN Frame read error")
 
         canopen_frame = self.parse_can_frame(can_frame)
         if not canopen_frame:
-            raise "CANopen Frame parse error"
+            raise Exception("CANopen Frame parse error")
         
         return canopen_frame
             
@@ -125,7 +125,6 @@ class CANopen:
         return res.value
         
 
-       
     def SDODownloadExp(self, node, index, subindex, data, size):
         """
         Expediated SDO download
@@ -135,6 +134,7 @@ class CANopen:
 
         if ret != 0:
             raise Exception("CANopen Expediated SDO download error")
+
 
     #
     # SEGMENTED

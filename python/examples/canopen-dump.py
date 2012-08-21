@@ -14,7 +14,7 @@
 Read CAN frame, parse into CANopen frame, and dump to STDOUT.
 """
 
-from pyCANopen import *
+from pycanopen import *
 
 canopen = CANopen()
 
