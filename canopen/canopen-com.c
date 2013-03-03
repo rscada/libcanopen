@@ -140,9 +140,10 @@ canopen_sdo_upload_exp(int sock, uint8_t node, uint16_t index,
          
                     // matching our node id and we got a SDO TX: process package   
                     if (canopen_com_debug)
-                        printf("REPLY [%d] (%d): 0x%.2X 0x%.2X 0x%.2X 0x%.2X \n", 
+                        printf("REPLY [%d] (%d): 0x%.2X 0x%.2X 0x%.2X 0x%.2X -> %.8x\n", 
                                frame_count, s, canopen_frame.payload.sdo.data[0], canopen_frame.payload.sdo.data[1],
-                               canopen_frame.payload.sdo.data[2], canopen_frame.payload.sdo.data[3]);
+                               canopen_frame.payload.sdo.data[2], canopen_frame.payload.sdo.data[3],
+			       canopen_decode_uint((uint8_t *)&(canopen_frame.payload.sdo.data), s));
 
                     *data = canopen_decode_uint((uint8_t *)&(canopen_frame.payload.sdo.data), s);
                     return 0;

@@ -27,6 +27,8 @@
 
 #include "canopen.h"
 
+static int canopen_debug = 0;
+
 static SDO_abort_code_t SDO_abort_codes[] = {
     { 0x05030000, "Toggle bit not alternated" },
     { 0x05040000, "SDO protocol timed out" },
@@ -1125,6 +1127,9 @@ canopen_sdo_get_size(canopen_sdo_t *sdo)
 {
     int n = 0;
 
+    if (canopen_debug)
+        printf("%s: sdo->command & CANOPEN_SDO_CS_MASK = %.2x\n", __PRETTY_FUNCTION__, sdo->command & CANOPEN_SDO_CS_MASK);
+
     switch (sdo->command & CANOPEN_SDO_CS_MASK)
     {
         //case CANOPEN_SDO_CS_TX_IDD:
@@ -1140,6 +1145,10 @@ canopen_sdo_get_size(canopen_sdo_t *sdo)
                 (sdo->command & CANOPEN_SDO_CS_ID_S_FLAG))
             {
                 n = 4 - ((sdo->command & CANOPEN_SDO_CS_ID_N_MASK) >> CANOPEN_SDO_CS_ID_N_SHIFT);
+            }
+            else
+            {
+                n = 4;
             }
             break;
 
