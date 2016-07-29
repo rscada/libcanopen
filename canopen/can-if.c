@@ -28,7 +28,15 @@
 #include <canopen/can-if.h>
 
 int
-can_socket_open(char *interface, unsigned int timeout_sec)
+can_socket_open(char *interface)
+{
+ // Call the main function, with a default timeout
+ // of 1s.
+ return can_socket_open_timeout(interface, 1);
+}
+
+int
+can_socket_open_timeout(char *interface, unsigned int timeout_sec)
 {
     struct sockaddr_can addr;
     struct ifreq ifr;
