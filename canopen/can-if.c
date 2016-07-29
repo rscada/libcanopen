@@ -28,11 +28,11 @@
 #include <canopen/can-if.h>
 
 int
-can_socket_open(char *interface)
+can_socket_open(char *interface, unsigned int timeout_sec)
 {
     struct sockaddr_can addr;
     struct ifreq ifr;
-    struct timeval tv= {0,100000};
+    struct timeval tv= {timeout_sec,0};
     int sock, bytes_read;
 
     // create CAN socket
