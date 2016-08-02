@@ -51,7 +51,10 @@ can_socket_open_timeout(char *interface, unsigned int timeout_sec)
     }
  
     // set a timeoute for read
-    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv));
+    if (timeout_sec != 0)
+    {
+        setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv));
+    }
 
     // bind socket to the given interface
     strcpy(ifr.ifr_name, interface);
