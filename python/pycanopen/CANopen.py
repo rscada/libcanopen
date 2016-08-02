@@ -90,20 +90,20 @@ class CANopenFrame(Structure):
 
 class CANopen:
 
-    def __init__(self, interface="can0", timeout_us=0):
+    def __init__(self, interface="can0", timeout_sec=0):
         """
         Constructor for CANopen class. Optionally takes an interface 
         name for which to bind a socket to. Defaults to interface "can0"
         """
-        self.sock = libcanopen.can_socket_open_timeout(interface.encode('ascii'), timeout_us)
+        self.sock = libcanopen.can_socket_open_timeout(interface.encode('ascii'), timeout_sec)
         
-    def open(self, interface, timeout_us=0):
+    def open(self, interface, timeout_sec=0):
         """
         Open a new socket. If open socket already exist, close it first.
         """        
         if self.sock:
             self.close()
-        self.sock = libcanopen.can_socket_open_timeout(interface.encode('ascii'), timeout_us)
+        self.sock = libcanopen.can_socket_open_timeout(interface.encode('ascii'), timeout_sec)
         
     def close(self):
         """
