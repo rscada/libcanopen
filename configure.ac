@@ -13,6 +13,8 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 AC_CONFIG_MACRO_DIR([m4])
 
+AM_PROG_AR
+
 LT_INIT
 
 AM_PROG_LIBTOOL
