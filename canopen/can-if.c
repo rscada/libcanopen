@@ -4,7 +4,7 @@
 //
 // This file is part of the rSCADA system.
 //
-// rSCADA 
+// rSCADA
 // http://www.rSCADA.se
 // info@rscada.se
 //
@@ -15,11 +15,11 @@
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <unistd.h>
- 
+
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
-#include <stdio.h> 
+#include <stdio.h>
 #include <string.h>
 #include <strings.h>
 #include <stdint.h>
@@ -49,7 +49,7 @@ can_socket_open_timeout(char *interface, unsigned int timeout_sec)
         fprintf(stderr, "Error: Failed to create socket.\n");
         return -1;
     }
- 
+
     // set a timeoute for read
     if (timeout_sec != 0)
     {
@@ -62,7 +62,7 @@ can_socket_open_timeout(char *interface, unsigned int timeout_sec)
     addr.can_family = AF_CAN;
     addr.can_ifindex = ifr.ifr_ifindex;
     bind(sock, (struct sockaddr*)&addr, sizeof(addr)); // XXX Add check
- 
+
     return sock;
 }
 
@@ -79,7 +79,7 @@ can_filter_node_set(int sock, uint8_t node)
     struct can_filter rfilter[1];
 
     rfilter[0].can_id   = node;
-    rfilter[0].can_mask = 0x00;
+    rfilter[0].can_mask = 0x7f;
 
     // seems not to work to chance filters after bind
     setsockopt(sock, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
