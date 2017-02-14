@@ -38,9 +38,16 @@ can_socket_open(char *interface)
 int
 can_socket_open_timeout(char *interface, unsigned int timeout_sec)
 {
+    struct timeval tv= {timeout_sec,0};
+
+    return can_socket_open_timeval(interface, tv);
+}
+
+int
+can_socket_open_timeval(char *interface, struct timeval tv)
+{
     struct sockaddr_can addr;
     struct ifreq ifr;
-    struct timeval tv= {timeout_sec,0};
     int sock, bytes_read;
 
     // create CAN socket
@@ -49,9 +56,9 @@ can_socket_open_timeout(char *interface, unsigned int timeout_sec)
         fprintf(stderr, "Error: Failed to create socket.\n");
         return -1;
     }
- 
-    // set a timeoute for read
-    if (timeout_sec != 0)
+
+    // set a timeout for read
+    if (tv.tv_sec != 0 || tv.tv_usec != 0)
     {
         setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv));
     }
@@ -62,10 +69,9 @@ can_socket_open_timeout(char *interface, unsigned int timeout_sec)
     addr.can_family = AF_CAN;
     addr.can_ifindex = ifr.ifr_ifindex;
     bind(sock, (struct sockaddr*)&addr, sizeof(addr)); // XXX Add check
- 
+
     return sock;
 }
-
 
 int
 can_socket_close(int socket)

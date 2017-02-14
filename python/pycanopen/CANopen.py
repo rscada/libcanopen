@@ -88,6 +88,10 @@ class CANopenFrame(Structure):
         data_str = " ".join(["%.2x" % (x,) for x in self.data.data])    
         return "CANopen Frame: RTR=%d FC=0x%.2x ID=0x%.2x [len=%d] %s" % (self.rtr, self.function_code, self.id, self.data_len, data_str)
 
+class timeval(Structure):
+    _fields_ = [("tv_sec", c_long),
+                 ("tv_usec", c_long)]
+
 class CANopen:
 
     def __init__(self, interface="can0", timeout_sec=0):
@@ -95,7 +99,10 @@ class CANopen:
         Constructor for CANopen class. Optionally takes an interface 
         name for which to bind a socket to. Defaults to interface "can0"
         """
-        self.sock = libcanopen.can_socket_open_timeout(interface.encode('ascii'), timeout_sec)
+        tv = timeval()
+        tv.tv_sec = int(timeout_sec)
+        tv.tv_usec = int((timeout_sec - tv.tv_sec) * 1e06)
+        self.sock = libcanopen.can_socket_open_timeval(interface.encode('ascii'), tv)
         
     def open(self, interface, timeout_sec=0):
         """
@@ -103,7 +110,10 @@ class CANopen:
         """        
         if self.sock:
             self.close()
-        self.sock = libcanopen.can_socket_open_timeout(interface.encode('ascii'), timeout_sec)
+        tv = timeval()
+        tv.tv_sec = int(timeout_sec)
+        tv.tv_usec = int((timeout_sec - tv.tv_sec) * 1e06)
+        self.sock = libcanopen.can_socket_open_timeval(interface.encode('ascii'), tv)
         
     def close(self):
         """
