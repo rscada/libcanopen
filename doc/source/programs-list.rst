@@ -80,7 +80,7 @@ rs-canopen-sdo-download
 This program can be used for downloading SDOs to slave units.
 
 
-rs-canopen-pdo-upload
+rs-canopen-sdo-upload
 ---------------------
 
 This program can be used for uploading SDOs from slave units.
